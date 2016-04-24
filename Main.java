@@ -9,7 +9,7 @@ import java.util.Vector;
 
 public class Main {
 	public static void main(String args[]) throws IOException {
-		String filename = "ProjectAllocationData.tsv";
+		String filename = "src/ProjectAllocationData.tsv";
 		PreferenceTable table = new PreferenceTable(filename);
 
 		for (Vector<String> vector : table.getTextFile()) { // iterate through
@@ -80,16 +80,22 @@ public class Main {
 		System.out.println(sol.getRandomAssignment());
 
 		// Assignment 5 Tests
-		System.out.println("\n\n Assignment 5 \n\n");
-		CandidateSolution best = new CandidateSolution(table);
-		int n = 1000000;
-		for (int i = 0; i < n; i++) {
-			sol = new CandidateSolution(table);
-			if (sol.getEnergy() < best.getEnergy()) {
-				best = sol;
-			}
-		}
-
-		System.out.println("Best out of "+ n +" solutions: " + best.getEnergy() + " penalties: " + best.getPenalties());
+//		System.out.println("\n\n Assignment 5 \n\n");
+//		CandidateSolution best = new CandidateSolution(table);
+//		int n = 1000000;
+//		for (int i = 0; i < n; i++) {
+//			sol = new CandidateSolution(table);
+//			if (sol.getEnergy() < best.getEnergy()) {
+//				best = sol;
+//			}
+//		}
+//
+//		System.out.println("Best out of "+ n +" solutions: " + best.getEnergy() + " penalties: " + best.getPenalties());
+//	}
+	
+	System.out.println("***************BITS****************************");
+	sol.setBit();
+	sol.order();
+	sol.print();
 	}
 }
