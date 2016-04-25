@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Vector;
 
 /* * Patricia Loftus
  * 13381946
@@ -8,40 +9,30 @@ public class CandidateAssignment {
 	private String project = null;
 	private String prev_project = null;
 	private StudentEntry student;
-	private Bit bitcode;
+	private Bit projectCode;
+	private Boolean preassigned;
 
 	public CandidateAssignment(StudentEntry student) {
 		this.student = student;
 		randomizeAssignment();
-		bitcode = setBits();
+		preassigned = student.hasPreassignedProject();
 	}
-	
-	public Bit setBits() {
-		//int name = Integer.parseInt(String.valueOf(student.getStudentName().hashCode()));
-		int name = new Random().nextInt(2147483647);
-		name = Math.abs(name);
-		String code = Integer.toBinaryString(name);
-		int index = 0;
-		int[] bits = new int[31];
-		for (int j = 0; j < 31 ; j++) {
-			if (code.length() > j) {
-				if (code.charAt(j) == '0') {
-					bits[index] = 0;
-				}
-				else if (code.charAt(j) == '1') {
-					bits[index] = 1;
-				}
-			}
-			else {
-				bits[index] = 0;
-			}
-			index++;
-		}
-		return new Bit(bits, name);
+
+	public boolean isPreassigned() {
+		return preassigned;
 	}
-	
-	public Bit getBits(){
-		return bitcode;
+
+	public String toS() {
+		return student.getStudentName();
+	}
+
+	public void setBits(int a) {
+		projectCode = new Bit(a);
+
+	}
+
+	public Bit getBits() {
+		return projectCode;
 	}
 
 	public void randomizeAssignment() {
@@ -60,18 +51,30 @@ public class CandidateAssignment {
 	public String getAssignedProject() {
 		return project;
 	}
-	
-	public int getEnergy(){
+
+	public int getEnergy() {
 		int rank = student.getRanking(project);
 		if (rank != -1) {
-			return (rank + 1)^2;
-		}
-		else {
-			return 121;
+			return (int) Math.pow(rank, 2);
+		} else {
+			return 11*11;
 		}
 	}
 
 	public String toString() {
 		return student + "\tProject: " + project;
+	}
+	
+	public void setProject(String pName){
+		prev_project = project;
+		project = pName;
+	}
+	
+	public void setBit(int b) {
+		projectCode = new Bit(b);
+	}
+
+	public void setBit(Bit bit) {
+		projectCode = bit;
 	}
 }

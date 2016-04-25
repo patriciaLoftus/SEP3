@@ -49,7 +49,6 @@ public class PreferenceTable {
 			String line = null;
 			line = input.readLine();
 			line = input.readLine(); // skips the first line
-
 			while (line != null) {
 				Vector<String> stringVector = new Vector<String>();
 				// split into cells
@@ -69,9 +68,8 @@ public class PreferenceTable {
 					stringVector.add(next);
 					i++;
 				}
-				StudentEntry std = new StudentEntry(stringVector.get(0)); // make
-																			// new
-																			// student
+				StudentEntry std = new StudentEntry(stringVector.get(0)); // make															// new
+				std.setPreassigned(stringVector.get(1).equals("Yes"));															// student
 				for (String project : pro) {
 					std.addPreference(project);
 				}
@@ -86,10 +84,13 @@ public class PreferenceTable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return fullVector;
 	}
 
+	public Vector<String> getProjects(){
+		return projects;
+	}
+	
 	public StudentEntry getEntryFor(String name) {
 		return studentLookup.get(name);
 	}

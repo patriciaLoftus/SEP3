@@ -34,6 +34,10 @@ public class StudentEntry {
 	public String getStudentName() {
 		return name;
 	}
+	
+	public void setPreassigned(boolean val){
+		preassigned = val;
+	}
 
 	public Boolean hasPreassignedProject() {
 		return preassigned;
@@ -73,5 +77,9 @@ public class StudentEntry {
 				return true;
 		}
 		return false;
+	}
+
+	public String getPreassigned() {
+		return projects.elementAt(0);
 	}
 }
