@@ -59,4 +59,27 @@ public class Bit {
 			bitcode[i] = 0;
 		}
 	}
+	
+	public Bit merge(Bit other, int pivot){
+		int[] newBitCode = new int[7];
+		Random rand = new Random();
+		int x = rand.nextInt(2);
+		if (x == 0) {
+		for (int i = 0; i < pivot; i++){
+			newBitCode[i] = bitcode[i];
+		}
+		for (int i = pivot; i < 7; i++){
+			newBitCode[i] = other.bitcode[i];
+		}
+		}
+		else {
+			for (int i = 0; i < pivot; i++){
+				newBitCode[i] = other.bitcode[i];
+			}
+			for (int i = pivot; i < 7; i++){
+				newBitCode[i] = bitcode[i];
+			}
+		}
+		return new Bit(newBitCode);
+	}
 }

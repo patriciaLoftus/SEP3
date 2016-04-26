@@ -26,13 +26,26 @@ public class CandidateAssignment {
 		return student.getStudentName();
 	}
 
-	public void setBits(int a) {
-		projectCode = new Bit(a);
-
-	}
-
 	public Bit getBits() {
 		return projectCode;
+	}
+	
+	public boolean giveNextPref(Vector<String> projects){
+		Vector<String> projectsOccured = new Vector<String>();
+		for (String pro: student.getOrderedPreferences()){
+			boolean flag = true;
+			for (String other:projects){
+				if (other.equals(pro)){
+					flag = false;
+				}
+			}
+			if (flag){
+				this.setProject(pro);
+				return true;
+			}
+		}
+		return false;
+
 	}
 
 	public void randomizeAssignment() {
@@ -76,5 +89,28 @@ public class CandidateAssignment {
 
 	public void setBit(Bit bit) {
 		projectCode = bit;
+	}
+
+
+	public void giveRandom(Vector<String> pro, Vector<String> projects) {
+		Random rand = new Random();
+		int i = rand.nextInt(projects.size());
+		String project = projects.get(i);
+		while(pro.contains(project.intern())){
+			i = rand.nextInt(projects.size());
+			project = projects.get(i);
+		}
+		this.project = project;
+	}
+
+	public void fillPreferences(Vector<String> projects) {
+		Random rand = new Random();
+		while (student.getOrderedPreferences().size() < 10){
+			String choice = projects.get(rand.nextInt(projects.size()));
+			if (!student.getOrderedPreferences().contains(choice)){
+				student.addProject(choice);
+			}
+		}
+		
 	}
 }
