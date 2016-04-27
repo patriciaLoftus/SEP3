@@ -9,7 +9,12 @@ import java.util.Vector;
 
 public class Main {
 	public static void main(String args[]) throws IOException {
-		Population p = new Population(300, "src/ProjectAllocationData.tsv");
-		p.GA();
+		PreferenceTable pt = new PreferenceTable("src/ProjectAllocationData.tsv");
+		CandidateSolution cand = new CandidateSolution(pt);
+		SimulatedAnnealing sa = new SimulatedAnnealing();
+		sa.getBestSolution(cand, 1000, 1);
+		
+//		Population p = new Population(200,"src/ProjectAllocationData.tsv");
+//		p.GA();
 	}
 }

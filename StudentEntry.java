@@ -16,6 +16,11 @@ public class StudentEntry {
 	public StudentEntry(String myName) {
 		name = myName;
 	}
+	
+	public StudentEntry clone() throws CloneNotSupportedException{
+		return (StudentEntry) super.clone();
+	}
+
 
 	public int getRanking(String pName) {
 		pName = pName.intern();

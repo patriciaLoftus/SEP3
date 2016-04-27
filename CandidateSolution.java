@@ -11,7 +11,6 @@ public class CandidateSolution {
 	private PreferenceTable pref;
 	private Hashtable<String, Integer> table = new Hashtable<String, Integer>();
 	private static final int Penalty = 1000;
-	private Vector<Bit> bits;
 
 	public CandidateSolution(PreferenceTable pref) {
 		this.pref = pref;
@@ -22,7 +21,13 @@ public class CandidateSolution {
 			allCandidates.add(cand);
 			i++;
 		}
-		bits = new Vector<Bit>();
+	}
+	
+	public Vector<CandidateAssignment> getAssignments(){
+		return allCandidates;
+	}
+	public int size(){
+		return allCandidates.size();
 	}
 
 	public CandidateAssignment getAssignmentFor(String name) {
@@ -45,58 +50,13 @@ public class CandidateSolution {
 			i++;
 		}
 		s = s + "\nTOTAL FITNESS: " + getFitness();
+		s = s + "\nTOTAL Energy: " + getEnergy();
 		return s;
 	}
 
 	public CandidateAssignment getRandomAssignment() {
 		Random rand = new Random();
 		return allCandidates.get(rand.nextInt(allCandidates.size()));
-	}
-
-	public Vector<Bit> getBits() {
-		return bits;
-	}
-
-	public void setBits(Vector<Bit> bits) {
-		int i = 0;
-		Random r = new Random();
-		Vector<Integer> ints = new Vector<Integer>();
-		Vector<Integer> left = new Vector<Integer>();
-		for (Bit bit : bits) {
-			boolean flag = false;
-			for (int j = 0; j < ints.size(); j++) {
-				if (ints.get(j) - bit.getValue() == 0) {
-					flag = true;
-					break;
-				}
-			}
-			if (flag || bit.getValue() >= 69) {
-				left.add(i);
-			} else {
-				allCandidates.get(i).setBit(bit);
-				allCandidates.get(i).setProject(pref.getProjects().get(bit.getValue()));
-				ints.add(bit.getValue());
-			}
-			i++;
-		}
-		i = 0;
-		int x = r.nextInt(69);
-		for (int l : left) {
-			while (ints.contains(x)) {
-				x = r.nextInt(69);
-			}
-			ints.add(x);
-			allCandidates.get(l).setBit(x);
-			allCandidates.get(l).setProject(pref.getProjects().get(x));
-		}
-		setBits();
-	}
-
-	public void setBits() {
-		bits = new Vector<Bit>();
-		for (CandidateAssignment cand : allCandidates) {
-			bits.add(cand.getBits());
-		}
 	}
 
 	public int getEnergy() {
@@ -107,7 +67,7 @@ public class CandidateSolution {
 			energy += cand.getEnergy();
 			String project = cand.getAssignedProject().intern();
 			if (table.containsKey(project)) {
-				System.out.println("FUUUUUUUUUUUUUUUCK");
+				// System.out.println("FUUUUUUUUUUUUUUUCK");
 				penaltyCount++;
 				int v = table.get(project);
 				table.replace(project, v + 1);
@@ -131,39 +91,54 @@ public class CandidateSolution {
 		return -getEnergy();
 	}
 	
-	public void giveRandomProjects() {
-		Random rand = new Random();
-		Vector<String> pro = new Vector<String>();
-		for(CandidateAssignment cand: allCandidates){
-			cand.randomizeAssignment();
-			String current = cand.getAssignedProject();
-			while(pro.contains(current)){
-				int x = rand.nextInt(pref.getProjects().size());
-				current = pref.getProjects().get(x);
+	public void replace(CandidateAssignment cand){
+		for (CandidateAssignment c: allCandidates){
+			if (c.getStudentEntry().getStudentName().equals(cand.getStudentEntry().getStudentName())){
+				c.setProject(cand.getAssignedProject());
 			}
-			cand.setProject(current);
-			pro.add(current);
-			cand.setBit(pref.getProjects().indexOf(current));
 		}
 	}
-
-	private Vector<CandidateAssignment> getRC(
-			Vector<CandidateAssignment> candidates) {
-		Random rand = new Random();
-		int i = rand.nextInt(allCandidates.size());
-		CandidateAssignment cand = allCandidates.get(i);
-		while (candidates.contains(cand)){
-			i = rand.nextInt(allCandidates.size());
-			cand = allCandidates.get(i);
-		}
-		candidates.add(cand);
-		return candidates;
-	}
-
 	public void fillPreferences() {
 		for (CandidateAssignment cand : allCandidates) {
 			cand.fillPreferences(pref.getProjects());
 		}
-		
+
+	}
+
+	public void removeClashes() {
+		Vector<String> projects = new Vector<String>();
+		Vector<Integer> index = new Vector<Integer>();
+//		while (index.size() < size()){
+//			Random rand = new Random();
+//			int x = rand.nextInt(size());
+//			
+//			while (index.contains(x)){
+//				x = rand.nextInt(size());
+//			}
+//			
+//			while (projects.contains(allCandidates.get(x).getAssignedProject())){
+//				allCandidates.get(x).randomizeAssignment();
+//			}
+//			index.add(x);
+//			projects.add(allCandidates.get(x).getAssignedProject());
+//		}
+		for(CandidateAssignment c:allCandidates){
+			int i = 0;
+			Random r = new Random();
+			while(projects.contains(c.getAssignedProject())){
+				if (i == 15){
+					for (String str: pref.getProjects()){
+						if (!projects.contains(str)) {
+							c.setProject(str);
+						}
+					}
+				}
+				else{
+					c.randomizeAssignment();
+					i++;
+				}
+			}
+			projects.add(c.getAssignedProject());
+		}
 	}
 }

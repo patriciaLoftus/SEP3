@@ -6,13 +6,13 @@ import java.util.Vector;
 public class Population {
 
 	public Vector<CandidateSolution> solutions;
-	//public static final int FACTOR = 50;
-	public static final double CULLFACTOR = 0.5;
-	public static final double MATEFACTOR = 0.01;
+	// public static final int FACTOR = 50;
+	public static final double MATEFACTOR = 0.1;
+	public static int N;
 	public PreferenceTable pref;
-	
 
 	public Population(int amount, String filename) {
+		N = amount / 2;
 		solutions = new Vector<CandidateSolution>();
 		try {
 			pref = new PreferenceTable(filename);
@@ -23,14 +23,6 @@ public class Population {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		giveRandomProjects();
-	}
-
-	public void giveRandomProjects() {
-		for (CandidateSolution sol : solutions) {
-			sol.fillPreferences();
-			sol.giveRandomProjects();
 		}
 	}
 
@@ -44,11 +36,12 @@ public class Population {
 		boolean flag = true;
 		while (flag) {
 			flag = false;
-			for (j = 0; j < solutions.size() - 1; j ++){
-				if (solutions.get(j).getFitness() < solutions.get(j+1).getFitness()){
+			for (j = 0; j < solutions.size() - 1; j++) {
+				if (solutions.get(j).getFitness() < solutions.get(j + 1)
+						.getFitness()) {
 					CandidateSolution temp = solutions.get(j);
-					solutions.set(j, solutions.get(j+1));
-					solutions.set(j+1, temp);
+					solutions.set(j, solutions.get(j + 1));
+					solutions.set(j + 1, temp);
 					flag = true;
 				}
 			}
@@ -56,115 +49,101 @@ public class Population {
 	}
 
 	public void cull() {
-		System.out.println("SIZE: " + solutions.size());
-		int amount = (int) (solutions.size() * CULLFACTOR);
-		for (int i = 0; i < amount; i++){
-			solutions.remove(solutions.size()-1);
+		order();
+		int i = solutions.size();
+		while (i > N) {
+			solutions.remove(solutions.size() - 1);
+			i = solutions.size();
 		}
 	}
-	
-	public void mate(){
-		boolean flag = true;
+
+	public void mate() {
+		order();
+		Random rand = new Random();
 		double a = solutions.size() * MATEFACTOR;
-		long amount = Math.round(a);
-		if(amount < 2){amount = 3;}
+		int amount = (int) Math.round(a);
+		if (amount < 2) {
+			amount = 2;
+		}
+		int x = 0;
 		Vector<CandidateSolution> sols = getFittest(amount);
 		Vector<CandidateSolution> newsols = new Vector<CandidateSolution>();
-		System.out.println("Amount "+ amount);
-		for (int i = 0; i < amount; i++){
-			for (int j = i; j < amount ; j++){
-				if(j < solutions.size()){
-					CandidateSolution newSol  = pushMate(sols.get(i),sols.get(j), flag);
-					newsols.add(newSol);
-					flag = !flag;
-				}
-			}
-			for(int j = 0; j < solutions.size(); j++){
-				CandidateSolution newSol  =  pushMate(sols.get(i),solutions.get(j), flag);
-				newsols.add(newSol);
-				flag = !flag;
-			}
-		}	
-		solutions = newsols;
-	}
-	
-	public CandidateSolution pushMate(CandidateSolution a, CandidateSolution b, boolean flag){
-		if (flag){
-			CandidateSolution temp = b;
-			b = a;
-			a = temp;
+
+		for (int i = solutions.size(); i < N * 2; i++) {
+			x = rand.nextInt(amount);
+			int y = rand.nextInt(amount);
+			sols.add(pushMate(solutions.get(y), solutions.get(x)));
 		}
-		Random r = new Random();
-		a.setBits();
-		b.setBits();
-		Vector<Bit> newbits = new Vector<Bit>();
-		CandidateSolution sol = new CandidateSolution(pref);
-		int i = 0;
-		int pivot = r.nextInt(51);
-		for (Bit aBits : a.getBits()) {
-			Bit newProjectCode = new Bit(aBits.getBitCode());
-			Bit bBits = b.getBits().get(i);
-				if( i ==  pivot){
-					newProjectCode = aBits.merge(bBits, r.nextInt(bBits.getBitCode().length));
-				}
-				else if(i > pivot){
-					newProjectCode = new Bit(bBits.getBitCode());
-				}
-				
-			i++;
-			newbits.add(newProjectCode);
+
+		for (CandidateSolution sol : sols) {
+			solutions.add(sol);
 		}
-		sol.setBits(newbits);
-		return sol;
 	}
-	
-	public void mutate(){
-			Random r = new Random();
-			int x = r.nextInt(solutions.size());
-			if (x > 2){
-				CandidateSolution sol = solutions.elementAt(x);
-				sol.giveRandomProjects();
-				order();
+
+	public CandidateSolution pushMate(CandidateSolution a, CandidateSolution b) {
+		CandidateSolution child = new CandidateSolution(pref);
+		Random rand = new Random();
+		int x = rand.nextInt(2);
+
+		for (int i = 0; i < child.size(); i++) {
+			if (x == 0) {
+				child.replace(b.getAssignments().get(i));
+
+			} else {
+				child.replace(a.getAssignments().get(i));
 			}
+			x = rand.nextInt(2);
+		}
+		child.removeClashes();
+		return child;
 	}
 
 	public Vector<CandidateSolution> getFittest(long amount) {
+		order();
 		Vector<CandidateSolution> fittest = new Vector<CandidateSolution>();
 		for (int i = 0; i < amount; i++) {
-			if(solutions.size() > i){
+			if (solutions.size() > i) {
 				fittest.add(solutions.elementAt(i));
 			}
 		}
-		for (CandidateSolution fit: fittest){
+		for (CandidateSolution fit : fittest) {
 			solutions.remove(fit);
 		}
 		return fittest;
 	}
-	public int getBestFitness(){
+
+	public int getBestFitness() {
 		return solutions.elementAt(0).getFitness();
 	}
-	public CandidateSolution getBestSol(){
+
+	public CandidateSolution getBestSol() {
 		return solutions.elementAt(0);
 	}
-	
+
 	public void GA(){
 		boolean flag = true;
-		int fit = solutions.elementAt(0).getFitness();
-		int prev = -1000;
+		order();
+		System.out.println("GEN " + 0 + " BEST: " + getBestFitness() + " worst "+ solutions.get(solutions.size()-1).getFitness());
+		int fit = 0;
+		int prev = getBestFitness();
+		int prevWorst = solutions.get(solutions.size()-1).getFitness();
+		int worst = solutions.get(solutions.size()-1).getFitness();
 		int i = 1;
-		while (prev < fit || i == 1){
-			order();
+		while (flag){
 			cull();
 			mate();
 			order();
+			//upate fitness values
 			prev = fit;
-			fit = solutions.elementAt(0).getFitness();
+			prevWorst = worst;
+			worst = solutions.get(solutions.size()-1).getFitness();
+			fit = getBestFitness();
 			System.out.println("GEN " + i + " BEST: " + getBestFitness() + " worst "+ solutions.get(solutions.size()-1).getFitness());
+			flag = (prevWorst != worst || prev != fit)&& fit != worst; 
 			i++;
 		}
 		
-		System.out.println("END");
+		System.out.println("END At generation " + i + " with fitness " + fit);
 		CandidateSolution sol = getBestSol();
-		System.out.println(sol.getFitness());
 	}
 }
