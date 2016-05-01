@@ -1,12 +1,10 @@
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Vector;
 
 public class Population {
 
 	public Vector<CandidateSolution> solutions;
-	// public static final int FACTOR = 50;
 	public static final double MATEFACTOR = 0.1;
 	public static int N;
 	public PreferenceTable pref;
@@ -67,20 +65,15 @@ public class Population {
 		}
 		int x = 0;
 		Vector<CandidateSolution> sols = getFittest(amount);
-		Vector<CandidateSolution> newsols = new Vector<CandidateSolution>();
 
 		for (int i = solutions.size(); i < N * 2; i++) {
 			x = rand.nextInt(amount);
 			int y = rand.nextInt(amount);
-			sols.add(pushMate(solutions.get(y), solutions.get(x)));
-		}
-
-		for (CandidateSolution sol : sols) {
-			solutions.add(sol);
+			solutions.add(mate(sols.get(x), sols.get(y)));
 		}
 	}
 
-	public CandidateSolution pushMate(CandidateSolution a, CandidateSolution b) {
+	public CandidateSolution mate(CandidateSolution a, CandidateSolution b) {
 		CandidateSolution child = new CandidateSolution(pref);
 		Random rand = new Random();
 		int x = rand.nextInt(2);

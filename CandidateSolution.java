@@ -112,7 +112,12 @@ public class CandidateSolution {
 	public void removeClashes() {
 		Vector<String> projects = new Vector<String>();
 		Vector<Integer> index = new Vector<Integer>();
-		for(CandidateAssignment c:allCandidates){
+		for(int i = 0; i < allCandidates.size(); i++){
+			index.add(i);
+		}
+		Collections.shuffle(index);
+		for(int j :index){
+			CandidateAssignment c = allCandidates.get(j);
 			int i = 0;
 			Random r = new Random();
 			while(projects.contains(c.getAssignedProject())){

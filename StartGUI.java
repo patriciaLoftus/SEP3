@@ -1,5 +1,3 @@
-package groupProject;
-
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -83,25 +81,23 @@ public class StartGUI
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-                int DResult = JOptionPane.showConfirmDialog(null,"Would you like to change the number of generations?");
+                int DResult = JOptionPane.showConfirmDialog(null,"Would you like to change the population size?");
                 
-                /*If the user doesn't wanna change the number of generations, the program runs with the default number.*/
+                /*If the user doesn't want to  change the number of population size, the program runs with the default number.*/
                 if (DResult == JOptionPane.NO_OPTION) 
                 {
-                   // JOptionPane.showMessageDialog(null,"Deletion Cancel", "DELETION",JOptionPane.DEFAULT_OPTION);
-    				GeneticAlgorithm g = new GeneticAlgorithm(); //NEEDS CHANGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WHATEVER NAME IS IT FOR GA!!!!!!!!!!!!!!!!!!!!
-    				CandidateSolution solution1 = g.getBestSolution(cand, 1000, 1); // getBestSolution(cand, 1000, 1) NEEDS CHANGING!!!! DONT SEE CODE FOR GA!!! 
+    				GeneticAlgorithm g = new GeneticAlgorithm(200, "src/ProjectAllocationData.tsv"); 
+    				CandidateSolution solution1 = g.getBestSolution(); 
                 	ResultGUI outcome=new ResultGUI(solution1);
                 	outcome.frame.setVisible(true);   	
                 }
                 
-                /*If the yes button is pressed, asks the user what amount of generations they want to change to.*/
+                /*If the yes button is pressed, asks the user what population size they want to change to.*/
                 if (DResult == JOptionPane.YES_OPTION)
 			    {
-                    String generations = JOptionPane.showInputDialog("Enter the amount of times you want the algorithm to run:");
-    				GeneticAlgorithm g = new GeneticAlgorithm(); //NEEDS CHANGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WHATEVER NAME IS IT FOR GA!!!!!!!!!!!!!!!!!!!!
-                	//g.change(cand, generations); NEEDS CHANGING TOO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    				CandidateSolution solution1 = g.getBestSolution(cand, 1000, 1); // getBestSolution(cand, 1000, 1) NEEDS CHANGING!!!! DONT SEE CODE FOR GA!!! 
+                    String popszie = JOptionPane.showInputDialog("Enter the population size:");
+    				GeneticAlgorithm g = new GeneticAlgorithm(Integer.parseInt(popszie), "src/ProjectAllocationData.tsv");
+    				CandidateSolution solution1 = g.getBestSolution(); 
                 	ResultGUI outcome = new ResultGUI(solution1);
                 	outcome.frame.setVisible(true);
 			    }			

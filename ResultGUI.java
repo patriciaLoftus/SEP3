@@ -1,5 +1,3 @@
-package groupProject;
-
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -26,29 +24,7 @@ public class ResultGUI
 	JScrollPane jsp;	//initialize scroll bar controller variable
 	ResultSet rs1, rs2;
 	CandidateSolution table;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) 
-	{
-   		EventQueue.invokeLater(new Runnable() 
-   		{
-			public void run() 
-			{
-				try 
-				{
-					DisplayCand c=new DisplayCand(null); 
-					c.frame.setVisible(true);
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	
-
 	public void showRecords()
 	{
 		dtm.setRowCount(0);
