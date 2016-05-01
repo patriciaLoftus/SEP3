@@ -16,6 +16,12 @@ public class CandidateAssignment {
 		randomizeAssignment();
 		preassigned = student.hasPreassignedProject();
 	}
+	public CandidateAssignment(CandidateAssignment cand) {
+		this.student = cand.student;
+		this.project = cand.project;
+		this.preassigned = student.hasPreassignedProject();
+		this.prev_project = cand.prev_project;
+	}
 	
 	public CandidateAssignment clone() throws CloneNotSupportedException{
 		return (CandidateAssignment) super.clone();

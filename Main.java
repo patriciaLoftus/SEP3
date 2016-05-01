@@ -1,20 +1,16 @@
-import java.io.IOException;
-import java.util.Vector;
-
-/*
- * Patricia Loftus
- * 13381946
- * Assignment 5
- */
+import java.awt.EventQueue;
 
 public class Main {
-	public static void main(String args[]) throws IOException {
-		PreferenceTable pt = new PreferenceTable("src/ProjectAllocationData.tsv");
-		CandidateSolution cand = new CandidateSolution(pt);
-		SimulatedAnnealing sa = new SimulatedAnnealing();
-		sa.getBestSolution(cand, 1000, 1);
-		
-//		Population p = new Population(200,"src/ProjectAllocationData.tsv");
-//		p.GA();
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI s = new GUI();
+					s.jf.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

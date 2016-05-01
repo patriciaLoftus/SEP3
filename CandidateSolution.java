@@ -22,7 +22,11 @@ public class CandidateSolution {
 			i++;
 		}
 	}
-	
+	public CandidateSolution(CandidateSolution sol) {
+		for (CandidateAssignment cand : sol.allCandidates){
+			this.allCandidates.add(new CandidateAssignment(cand));
+		}
+	}	
 	public Vector<CandidateAssignment> getAssignments(){
 		return allCandidates;
 	}
@@ -108,20 +112,6 @@ public class CandidateSolution {
 	public void removeClashes() {
 		Vector<String> projects = new Vector<String>();
 		Vector<Integer> index = new Vector<Integer>();
-//		while (index.size() < size()){
-//			Random rand = new Random();
-//			int x = rand.nextInt(size());
-//			
-//			while (index.contains(x)){
-//				x = rand.nextInt(size());
-//			}
-//			
-//			while (projects.contains(allCandidates.get(x).getAssignedProject())){
-//				allCandidates.get(x).randomizeAssignment();
-//			}
-//			index.add(x);
-//			projects.add(allCandidates.get(x).getAssignedProject());
-//		}
 		for(CandidateAssignment c:allCandidates){
 			int i = 0;
 			Random r = new Random();

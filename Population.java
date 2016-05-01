@@ -119,31 +119,4 @@ public class Population {
 	public CandidateSolution getBestSol() {
 		return solutions.elementAt(0);
 	}
-
-	public void GA(){
-		boolean flag = true;
-		order();
-		System.out.println("GEN " + 0 + " BEST: " + getBestFitness() + " worst "+ solutions.get(solutions.size()-1).getFitness());
-		int fit = 0;
-		int prev = getBestFitness();
-		int prevWorst = solutions.get(solutions.size()-1).getFitness();
-		int worst = solutions.get(solutions.size()-1).getFitness();
-		int i = 1;
-		while (flag){
-			cull();
-			mate();
-			order();
-			//upate fitness values
-			prev = fit;
-			prevWorst = worst;
-			worst = solutions.get(solutions.size()-1).getFitness();
-			fit = getBestFitness();
-			System.out.println("GEN " + i + " BEST: " + getBestFitness() + " worst "+ solutions.get(solutions.size()-1).getFitness());
-			flag = (prevWorst != worst || prev != fit)&& fit != worst; 
-			i++;
-		}
-		
-		System.out.println("END At generation " + i + " with fitness " + fit);
-		CandidateSolution sol = getBestSol();
-	}
 }
