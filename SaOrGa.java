@@ -25,7 +25,7 @@ public class SaOrGa {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) 
+	/*public static void main(String[] args) 
 	{
 		EventQueue.invokeLater(new Runnable() 
 		{
@@ -44,7 +44,7 @@ public class SaOrGa {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
