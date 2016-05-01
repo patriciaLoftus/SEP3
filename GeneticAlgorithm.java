@@ -20,7 +20,6 @@ public class GeneticAlgorithm {
 			prevWorst = worst;
 			worst = p.solutions.get(p.solutions.size()-1).getFitness();
 			fit = p.getBestFitness();
-			System.out.println(fit + " " + worst);
 			if (prev == fit){
 				i++;
 			}

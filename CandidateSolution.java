@@ -90,6 +90,16 @@ public class CandidateSolution {
 		}
 		return count;
 	}
+	
+	public int getRandomProjectsAssigned(){
+		int count = 0;
+		for (CandidateAssignment c: allCandidates){
+			if (c.getEnergy() > 100){
+				count++;
+			}
+		}
+		return count;
+	}
 
 	public int getFitness() {
 		return -getEnergy();
